@@ -1,14 +1,16 @@
 package com.trusteer.interview.dsysme;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * This class responsibility is to read all configuration files and create a list of all URL,IP pairs that needs
+ * to be monitored.
+ */
 public enum ConfigurationLoader {
 
     INSTANCE;
@@ -17,38 +19,6 @@ public enum ConfigurationLoader {
 
     ConfigurationLoader() {
         httpFileDescriptors = new ArrayList<>();
-    }
-
-    static public class HttpFileDescriptor {
-        URL url;
-        InetAddress ip;
-
-        public HttpFileDescriptor(String url, String ip) throws Exception {
-            this.url = new URL(url);
-            this.ip = InetAddress.getByName(ip);
-        }
-
-        public URL getUrl() {
-            return url;
-        }
-
-        public InetAddress getIp() {
-            return ip;
-        }
-
-        static public HttpFileDescriptor fromString(String descriptor) throws Exception{
-            String [] arr = descriptor.split(" +");
-            return new HttpFileDescriptor(arr[0].trim(), arr[1].trim());
-        }
-
-
-        @Override
-        public String toString() {
-            return "HttpFileDescriptor{" +
-                    "url=" + url +
-                    ", ip=" + ip +
-                    '}';
-        }
     }
 
     public void load() {
@@ -71,6 +41,7 @@ public enum ConfigurationLoader {
                         fd = HttpFileDescriptor.fromString(line);
                         httpFileDescriptors.add(fd);
                     }
+                    //TODO support *
                 } catch (Exception e) {
                     //TODO log
                     System.out.println("Failed to create descriptor for: " + line);
@@ -79,5 +50,9 @@ public enum ConfigurationLoader {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<HttpFileDescriptor> getHttpFileDescriptors() {
+        return httpFileDescriptors;
     }
 }

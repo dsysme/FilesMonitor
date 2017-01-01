@@ -1,9 +1,6 @@
 package com.trusteer.interview.dsysme;
 
-import sun.misc.Launcher;
-
 import java.io.File;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -12,6 +9,11 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
+ * This class responsibility is to return a list of configuration file names.
+ * All files under resource/config are assumed to be configuration files.
+ *
+ * TODO: Consider optimizing by keeping past result and recollecting only on explicit demand
+ *
  * Based on snippet taken from:
  * http://stackoverflow.com/questions/11012819/how-can-i-get-a-resource-folder-from-inside-my-jar-file/20073154#20073154
  */
@@ -36,7 +38,7 @@ public enum  ConfigurationFilesCollector {
             jar.close();
         }
         else { // Run with IDE
-            final URL url = Launcher.class.getResource("/" + path);
+            final URL url = getClass().getClassLoader().getResource(path);
             if (url != null) {
                 final File configFolder = new File(url.toURI());
                 for (File file : configFolder.listFiles()) {
