@@ -13,6 +13,7 @@ public class CheckFilesForModifications {
         AlertHandler alertHandler = new AlertHandler();
         AlertNotifier alertNotifier = new AlertByEmail("sharon.shmorak@gamil.com");
         alertHandler.add(alertNotifier);
+        alertHandler.add(new LogAlert());
         filesMonitor.addObserver(alertHandler);
         for (int i = 0; i < 5; ++i) {
             filesMonitor.checkModifications();
