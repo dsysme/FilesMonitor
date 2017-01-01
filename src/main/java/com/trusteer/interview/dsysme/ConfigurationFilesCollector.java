@@ -1,5 +1,8 @@
 package com.trusteer.interview.dsysme;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,12 +24,15 @@ public enum  ConfigurationFilesCollector {
 
     INSTANCE;
 
+    final static Logger logger = LoggerFactory.getLogger(ConfigurationFilesCollector.class);
+
     public List<String> collectConfigurationFiles() throws Exception {
         final String path = "config";
         final File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
         List<String> result = new ArrayList<>();
 
         if (jarFile.isFile()) {  // Run with JAR file
+            logger.info("extracting configuration files from jar");
             final JarFile jar = new JarFile(jarFile);
             final Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
             while (entries.hasMoreElements()) {
@@ -38,6 +44,7 @@ public enum  ConfigurationFilesCollector {
             jar.close();
         }
         else { // Run with IDE
+            logger.info("extracting configuration files from resources folder");
             final URL url = getClass().getClassLoader().getResource(path);
             if (url != null) {
                 final File configFolder = new File(url.toURI());

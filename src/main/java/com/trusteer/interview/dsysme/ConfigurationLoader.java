@@ -18,7 +18,7 @@ public enum ConfigurationLoader {
 
     INSTANCE;
 
-    final static Logger logger = LoggerFactory.getLogger(CheckFilesForModifications.class);
+    final static Logger logger = LoggerFactory.getLogger(ConfigurationLoader.class);
 
     private List<HttpFileDescriptor> httpFileDescriptors;
 
