@@ -1,6 +1,6 @@
 package com.trusteer.interview.dsysme;
 
-import java.net.InetAddress;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -8,21 +8,23 @@ import java.net.URL;
  * Created by Sharon on 27/12/2016.
  * TODO add validation
  */
-public class HttpFileDescriptor {
+public class HttpFileDescriptor implements Serializable {
 
-    private URL url;
-    private InetAddress ip;
+    private static final long serialVersionUID = 1L;
+
+    private String url;
+    private String ip;
 
     public HttpFileDescriptor(String url, String ip) throws Exception {
-        this.url = new URL(url);
-        this.ip = InetAddress.getByName(ip);
+        this.url = url;
+        this.ip = ip;
     }
 
-    public URL getUrl() {
+    public String getUrl() {
         return url;
     }
 
-    public InetAddress getIp() {
+    public String getIp() {
         return ip;
     }
 
@@ -34,7 +36,7 @@ public class HttpFileDescriptor {
 
     public URL toURLWithIp() throws MalformedURLException {
         String urlString = getUrl().toString();
-        urlString.replaceFirst(getUrl().getHost(), getIp().getHostAddress());
+        urlString.replaceFirst((new URL(url).getHost()), ip);
 
         return new URL(urlString);
     }
@@ -60,8 +62,8 @@ public class HttpFileDescriptor {
     @Override
     public String toString() {
         return "HttpFileDescriptor{" +
-                "url=" + url +
-                ", ip=" + ip +
+                "url='" + url + '\'' +
+                ", ip='" + ip + '\'' +
                 '}';
     }
 }

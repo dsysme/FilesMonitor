@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Observable;
 
@@ -11,10 +12,12 @@ import java.util.Observable;
  * Created by Sharon on 28/12/2016.
  */
 
-public class FilesMonitor extends Observable {
+public class FilesMonitor extends Observable  {
 
-    final static Logger logger = LoggerFactory.getLogger(FilesMonitor.class);
-    Map<HttpFileDescriptor, HttpFileTrackingInfo> monitoredFiles;
+    private static final Logger logger = LoggerFactory.getLogger(FilesMonitor.class);
+
+
+    private Map<HttpFileDescriptor, HttpFileTrackingInfo> monitoredFiles;
 
     public FilesMonitor(Map<HttpFileDescriptor, HttpFileTrackingInfo> monitoredFiles) {
         this.monitoredFiles = monitoredFiles;
@@ -53,4 +56,7 @@ public class FilesMonitor extends Observable {
     }
 
 
+    public Map<HttpFileDescriptor, HttpFileTrackingInfo> getMonitoredFiles() {
+        return Collections.unmodifiableMap(monitoredFiles);
+    }
 }

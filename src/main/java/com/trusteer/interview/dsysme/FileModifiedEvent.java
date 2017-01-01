@@ -31,7 +31,7 @@ public class FileModifiedEvent {
     @Override
     public String toString() {
         return "File " +
-                fileDescriptor.getUrl() + " changed on " + fileDescriptor.getIp().getHostAddress() +
+                fileDescriptor.getUrl() + " changed on " + fileDescriptor.getIp() +
                 " between " + before.getTimeStamp() +
                 " and " + after.getTimeStamp();
     }
