@@ -39,6 +39,7 @@ public enum  ConfigurationFilesCollector {
                 final String name = entries.nextElement().getName();
                 if (name.startsWith(path + "/")) { //filter according to the path
                     result.add(name);
+                    logger.info("found configuration file "+name);
                 }
             }
             jar.close();
@@ -50,6 +51,7 @@ public enum  ConfigurationFilesCollector {
                 final File configFolder = new File(url.toURI());
                 for (File file : configFolder.listFiles()) {
                     result.add(file.getAbsolutePath());
+                    logger.info("found configuration file "+file.getAbsolutePath());
                 }
             }
         }

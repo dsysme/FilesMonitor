@@ -30,7 +30,6 @@ public enum ConfigurationLoader {
 
         try {
             ConfigurationFilesCollector.INSTANCE.collectConfigurationFiles().stream().forEach(file -> loadDescriptors(file));
-            logger.info("loaded files descriptors from configuration files");
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -50,6 +49,7 @@ public enum ConfigurationLoader {
                     logger.error("Failed to create descriptor for: " + line);
                 }
             });
+            logger.info("Done loading from "+fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
