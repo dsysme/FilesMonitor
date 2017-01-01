@@ -1,5 +1,8 @@
 package com.trusteer.interview.dsysme;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -15,6 +18,8 @@ public enum ConfigurationLoader {
 
     INSTANCE;
 
+    final static Logger logger = LoggerFactory.getLogger(CheckFilesForModifications.class);
+
     private List<HttpFileDescriptor> httpFileDescriptors;
 
     ConfigurationLoader() {
@@ -25,11 +30,10 @@ public enum ConfigurationLoader {
 
         try {
             ConfigurationFilesCollector.INSTANCE.collectConfigurationFiles().stream().forEach(file -> loadDescriptors(file));
+            logger.info("loaded files descriptors from configuration files");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
-
-        httpFileDescriptors.stream().forEach(System.out::println);
     }
 
     private void loadDescriptors(String fileName) {
@@ -43,8 +47,7 @@ public enum ConfigurationLoader {
                     }
                     //TODO support *
                 } catch (Exception e) {
-                    //TODO log
-                    System.out.println("Failed to create descriptor for: " + line);
+                    logger.error("Failed to create descriptor for: " + line);
                 }
             });
         } catch (IOException e) {

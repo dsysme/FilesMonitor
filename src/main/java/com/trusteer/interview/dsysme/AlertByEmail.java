@@ -13,6 +13,6 @@ public class AlertByEmail implements AlertNotifier {
     @Override
     public void notify(FileModifiedEvent event) {
         // TODO replace with real code
-        System.out.println(email + " " + event);
+        //System.out.println(email + " " + event);
     }
 }

@@ -13,7 +13,7 @@ public enum TrackingInfoReader {
 
     INSTANCE;
 
-    public Map<HttpFileDescriptor, HttpFileTrackingInfo> read(File file) throws Exception{
+    public Map<HttpFileDescriptor, HttpFileTrackingInfo> read(File file) throws Exception {
         Map<HttpFileDescriptor, HttpFileTrackingInfo> result = Collections.EMPTY_MAP;
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             result = (Map<HttpFileDescriptor, HttpFileTrackingInfo>) ois.readObject();

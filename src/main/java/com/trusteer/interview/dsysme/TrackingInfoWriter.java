@@ -11,9 +11,7 @@ public enum TrackingInfoWriter {
 
     INSTANCE;
 
-    private String fileName  = "C:\\FilesMonitor\\MonitoredFiles.ser";
-
-    public String write(Map<HttpFileDescriptor, HttpFileTrackingInfo> monitoredFiles) throws Exception {
+    public String write(Map<HttpFileDescriptor, HttpFileTrackingInfo> monitoredFiles, String fileName) throws Exception {
         //TODO configuration
         //TODO handle existing file
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))) {
@@ -22,7 +20,4 @@ public enum TrackingInfoWriter {
         return fileName;
     }
 
-    public String getFileName() {
-        return fileName;
-    }
 }
