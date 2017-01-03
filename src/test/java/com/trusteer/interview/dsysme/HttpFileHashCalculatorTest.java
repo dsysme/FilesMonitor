@@ -1,5 +1,6 @@
 package com.trusteer.interview.dsysme;
 
+import com.trusteer.interview.dsysme.utils.HttpFileHashCalculator;
 import org.junit.Assert;
 import org.junit.Test;
 

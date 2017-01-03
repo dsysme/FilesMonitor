@@ -1,13 +1,15 @@
 package com.trusteer.interview.dsysme;
 
+import com.trusteer.interview.dsysme.data.HttpFileDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -22,10 +24,6 @@ public enum InputFilesLoader {
 
     private List<HttpFileDescriptor> httpFileDescriptors;
 
-    InputFilesLoader() {
-        httpFileDescriptors = new ArrayList<>();
-    }
-
     public void load(String folderName) {
 
         try {
@@ -36,24 +34,17 @@ public enum InputFilesLoader {
     }
 
     private void loadDescriptors(String fileName) {
-        logger.info("Loading urls from "+fileName);
-        try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
-            stream.forEach(line -> {
-                HttpFileDescriptor fd;
-                try {
-                    if (!line.trim().endsWith("*")) {
-                        fd = HttpFileDescriptor.fromString(line);
-                        httpFileDescriptors.add(fd);
-                    }
-                    //TODO support *
-                } catch (Exception e) {
-                    logger.error("Failed to create descriptor for: " + line);
-                }
-            });
-            logger.info("Done loading from "+fileName);
+        logger.info("Start loading urls from "+fileName);
+        Path path = Paths.get(fileName);
+        try (Stream<String> stream = Files.lines(path)) {
+            // handle simple pairs <url> <ip>
+            httpFileDescriptors = stream.filter(line -> !line.trim().endsWith("*")).map(line -> HttpFileDescriptor.fromString(line)).filter(fileDescriptor -> fileDescriptor.isValid()).collect(Collectors.toList());
+            // TODO handle pairs <url> *
+            //stream.filter(line -> line.trim().endsWith("*")).
         } catch (IOException e) {
             e.printStackTrace();
         }
+        logger.info("Done loading urls from "+fileName);
     }
 
     public List<HttpFileDescriptor> getHttpFileDescriptors() {

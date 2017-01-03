@@ -1,16 +1,17 @@
-package com.trusteer.interview.dsysme;
+package com.trusteer.interview.dsysme.alerts;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.FileAppender;
+import com.trusteer.interview.dsysme.FilesMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Created by Sharon on 01/01/2017.
- * Responsible for logging FileModifiedEvents as a distinct log file
+ * Responsible for logging FileModifiedEvents to a distinct log file $FILES_MONITOR_HOME/logs/FileModifications.log
  */
 public class LogAlert implements AlertNotifier {
 

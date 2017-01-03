@@ -1,5 +1,11 @@
 package com.trusteer.interview.dsysme;
 
+import com.trusteer.interview.dsysme.alerts.AlertHandler;
+import com.trusteer.interview.dsysme.alerts.AlertNotifier;
+import com.trusteer.interview.dsysme.alerts.EmailAlert;
+import com.trusteer.interview.dsysme.alerts.LogAlert;
+import com.trusteer.interview.dsysme.data.HttpFileDescriptor;
+import com.trusteer.interview.dsysme.data.TrackingInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,14 +13,20 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+/***
+ * config directory should be pass as VM parameter (-Dfile-monitor-config.dir="...") to main
+ * TODO no need to run check modification if no previous run tracking saved
+ * TODO clean code and externalize configuration such as SEND_TO
+ */
 public enum CheckFilesForModifications {
     INSTANCE;
 
     final static Logger logger = LoggerFactory.getLogger(CheckFilesForModifications.class);
     public static final String FILES_MONITOR = "FilesMonitor";
+    public static final String SEND_TO = "dsysme.interview@gmail.com";
     private static FilesMonitor filesMonitor;
-    String outputFolder;
-    String logFile;
+    private String outputFolder;
+    private String logFile;
 
     public static void main(String[] args) {
         CheckFilesForModifications.INSTANCE.logger.info("CheckFilesForModifications starting...");
@@ -25,7 +37,13 @@ public enum CheckFilesForModifications {
             logger.error("Failed to create FilesMonitor", e);
             System.exit(-1);
         }
-        CheckFilesForModifications.INSTANCE.associateFilesMonitorWithAlertHandlers();
+        try {
+            CheckFilesForModifications.INSTANCE.associateFilesMonitorWithAlertHandlers();
+        } catch (Exception e) {
+            logger.error("Failed to create Alert Notifier", e);
+            System.exit(-1);
+        }
+
         // do the actual monitoring
         CheckFilesForModifications.INSTANCE.filesMonitor.checkModifications();
         // save monitoring reference for next run
@@ -42,9 +60,9 @@ public enum CheckFilesForModifications {
         }
     }
 
-    private void associateFilesMonitorWithAlertHandlers() {
+    private void associateFilesMonitorWithAlertHandlers() throws Exception {
         AlertHandler alertHandler = new AlertHandler();
-        AlertNotifier alertNotifier = new EmailAlert("sharon.shmorak@gamil.com");
+        AlertNotifier alertNotifier = new EmailAlert(SEND_TO);
         alertHandler.add(alertNotifier);
         logger.info("Added email alert notifier");
         alertNotifier = new LogAlert(FILES_MONITOR, logFile);
@@ -53,6 +71,11 @@ public enum CheckFilesForModifications {
         filesMonitor.addObserver(alertHandler);
     }
 
+    /***
+     * config directory should be pass as VM parameter (-Dfile-monitor-config.dir="...") to main
+     * @return
+     * @throws Exception
+     */
     private String buildFilesMonitorEnv() throws Exception {
 
         outputFolder = System.getProperty("user.home")+File.separator+FilesMonitor.class.getSimpleName();
@@ -81,7 +104,7 @@ public enum CheckFilesForModifications {
             InputFilesLoader.INSTANCE.load(configFolderName);
             filesMonitor = FilesMonitorFactory.INSTANCE.createNewFilesMonitor(InputFilesLoader.INSTANCE.getHttpFileDescriptors());
         } else {
-            Map<HttpFileDescriptor, HttpFileTrackingInfo> monitoredFiles = new HashMap<>();
+            Map<HttpFileDescriptor, TrackingInfo> monitoredFiles = new HashMap<>();
             monitoredFiles.putAll(new HashMap<>(TrackingInfoReader.INSTANCE.read(historyFile)));
             filesMonitor = new FilesMonitor(monitoredFiles);
             logger.info("loaded files descriptors from previous run.");

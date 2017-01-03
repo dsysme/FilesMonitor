@@ -60,6 +60,8 @@ This check should occur every 10 minutes.
 - The program should write a log of its operations to a log file.
 
 **Installing**
+edit <File> section in logback.xml
 chmod 777 /home/dsysme/FilesMonitor.sh
 crontab -e 
 */1 * * * * /home/dsysme/FilesMonitor.sh /home/dsysme/FilesMonitor
+/home/dsysme/FilesMonitor.sh /home/dsysme/FilesMonitor

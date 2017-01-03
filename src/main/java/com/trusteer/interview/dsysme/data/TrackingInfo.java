@@ -1,4 +1,4 @@
-package com.trusteer.interview.dsysme;
+package com.trusteer.interview.dsysme.data;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,14 +6,14 @@ import java.util.Date;
 /**
  * Created by Sharon on 28/12/2016.
  */
-public class HttpFileTrackingInfo implements Serializable {
+public class TrackingInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private String hash;
     private Date timeStamp;
 
-    public HttpFileTrackingInfo(String hash) {
+    public TrackingInfo(String hash) {
         this.hash = hash;
         this.timeStamp = new Date();
     }

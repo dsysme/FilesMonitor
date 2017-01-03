@@ -1,4 +1,4 @@
-package com.trusteer.interview.dsysme;
+package com.trusteer.interview.dsysme.alerts;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-/**
- * Created by Sharon on 28/12/2016.
+/***
+ * This class is responsible for executing the logic associated with file modifications.
+ * It listens to file modification events and keeps a list of AlertNotifier.
+ * AlertNotifier encapsulate the logic to be executed upon file modification. When a monitored file was found to be
+ * modified, AlertHandler will call all AlertNotifiers to trigger alert.
  */
 public class AlertHandler extends ArrayList<AlertNotifier> implements Observer {
 

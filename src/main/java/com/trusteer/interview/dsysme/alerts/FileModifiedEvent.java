@@ -1,16 +1,19 @@
-package com.trusteer.interview.dsysme;
+package com.trusteer.interview.dsysme.alerts;
+
+import com.trusteer.interview.dsysme.data.HttpFileDescriptor;
+import com.trusteer.interview.dsysme.data.TrackingInfo;
 
 /**
- * Created by Sharon on 28/12/2016.
+ * Data object holding the details of file modified event
  * TODO use builder pattern
  */
 public class FileModifiedEvent {
 
     private HttpFileDescriptor fileDescriptor;
-    private HttpFileTrackingInfo before;
-    private HttpFileTrackingInfo after;
+    private TrackingInfo before;
+    private TrackingInfo after;
 
-    public FileModifiedEvent(HttpFileDescriptor fileDescriptor, HttpFileTrackingInfo before, HttpFileTrackingInfo after) {
+    public FileModifiedEvent(HttpFileDescriptor fileDescriptor, TrackingInfo before, TrackingInfo after) {
         this.fileDescriptor = fileDescriptor;
         this.before = before;
         this.after = after;
@@ -20,11 +23,11 @@ public class FileModifiedEvent {
         return fileDescriptor;
     }
 
-    public HttpFileTrackingInfo getBefore() {
+    public TrackingInfo getBefore() {
         return before;
     }
 
-    public HttpFileTrackingInfo getAfter() {
+    public TrackingInfo getAfter() {
         return after;
     }
 

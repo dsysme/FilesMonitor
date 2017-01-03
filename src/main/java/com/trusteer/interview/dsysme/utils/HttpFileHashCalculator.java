@@ -1,4 +1,4 @@
-package com.trusteer.interview.dsysme;
+package com.trusteer.interview.dsysme.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

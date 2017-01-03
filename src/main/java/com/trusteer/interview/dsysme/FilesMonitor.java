@@ -1,5 +1,9 @@
 package com.trusteer.interview.dsysme;
 
+import com.trusteer.interview.dsysme.alerts.FileModifiedEvent;
+import com.trusteer.interview.dsysme.data.HttpFileDescriptor;
+import com.trusteer.interview.dsysme.data.TrackingInfo;
+import com.trusteer.interview.dsysme.utils.HttpFileHashCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,10 +20,9 @@ public class FilesMonitor extends Observable  {
 
     private static final Logger logger = LoggerFactory.getLogger(FilesMonitor.class);
 
+    private Map<HttpFileDescriptor, TrackingInfo> monitoredFiles;
 
-    private Map<HttpFileDescriptor, HttpFileTrackingInfo> monitoredFiles;
-
-    public FilesMonitor(Map<HttpFileDescriptor, HttpFileTrackingInfo> monitoredFiles) {
+    public FilesMonitor(Map<HttpFileDescriptor, TrackingInfo> monitoredFiles) {
         this.monitoredFiles = monitoredFiles;
     }
 
@@ -27,8 +30,8 @@ public class FilesMonitor extends Observable  {
         logger.info("checking modifications");
         monitoredFiles.keySet().stream().forEach(monitoredFile -> {
                     logger.info("checking "+monitoredFile.toString());
-                    HttpFileTrackingInfo oldTrackingInfo = monitoredFiles.get(monitoredFile);
-                    HttpFileTrackingInfo newTrackingInfo = fileChanged(monitoredFile);
+                    TrackingInfo oldTrackingInfo = monitoredFiles.get(monitoredFile);
+                    TrackingInfo newTrackingInfo = fileChanged(monitoredFile);
                     if (newTrackingInfo != null) {
                         triggerFileChanged(monitoredFile, oldTrackingInfo, newTrackingInfo);
                     }
@@ -36,19 +39,19 @@ public class FilesMonitor extends Observable  {
         );
     }
 
-    private void triggerFileChanged(HttpFileDescriptor fileDescriptor, HttpFileTrackingInfo oldTrackinginfo, HttpFileTrackingInfo newTrackinginfo) {
+    private void triggerFileChanged(HttpFileDescriptor fileDescriptor, TrackingInfo oldTrackinginfo, TrackingInfo newTrackinginfo) {
         monitoredFiles.put(fileDescriptor, newTrackinginfo);
         this.setChanged();
         FileModifiedEvent event = new FileModifiedEvent(fileDescriptor, oldTrackinginfo, newTrackinginfo);
         notifyObservers(event);
     }
 
-    private HttpFileTrackingInfo fileChanged(HttpFileDescriptor monitoredFile) {
-        HttpFileTrackingInfo before = monitoredFiles.get(monitoredFile);
+    private TrackingInfo fileChanged(HttpFileDescriptor monitoredFile) {
+        TrackingInfo before = monitoredFiles.get(monitoredFile);
         try {
             String currentHash = HttpFileHashCalculator.INSTANCE.getHash(monitoredFile.toURLWithIp());
             if (!currentHash.isEmpty() && !currentHash.equals(before.getHash())) {
-                return new HttpFileTrackingInfo(currentHash);
+                return new TrackingInfo(currentHash);
             }
         } catch (MalformedURLException e) {
            logger.error("Failed to calculate hash for "+monitoredFile);
@@ -57,7 +60,7 @@ public class FilesMonitor extends Observable  {
     }
 
 
-    public Map<HttpFileDescriptor, HttpFileTrackingInfo> getMonitoredFiles() {
+    public Map<HttpFileDescriptor, TrackingInfo> getMonitoredFiles() {
         return Collections.unmodifiableMap(monitoredFiles);
     }
 }
