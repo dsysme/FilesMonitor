@@ -12,6 +12,5 @@ then
     logger  $pID "already running. not restarting."
 else
     # start jar file
-    dsysme-files-monitor-0.1.0.jar
-    /usr/bin/java -jar -Dfile-monitor-config.dir=FILES_MONITOR_HOME/config -Dlogback.configurationFile=$FILES_MONITOR_HOME/logback.xml $FILES_MONITOR_HOME/dsysme-files-monitor-0.1.0.jar
+    /usr/bin/java -jar -Dfile-monitor-config.dir=$FILES_MONITOR_HOME/config -Dlogback.configurationFile=$FILES_MONITOR_HOME/logback.xml $FILES_MONITOR_HOME/dsysme-files-monitor-0.1.0.jar
 fi
