@@ -6,7 +6,7 @@ export FILES_MONITOR_HOME=$1
 pID=$(pgrep -n "dsysme-files-monitor-0.1.0.jar")
 
 # Check if jarfile is running
-if $pID > /dev/null
+if [[ ! -z $pID ]]
 then
     #log something to syslog
     echo "already running. not restarting: $(date)" >> /tmp/FilesMonitorScheduler.log
