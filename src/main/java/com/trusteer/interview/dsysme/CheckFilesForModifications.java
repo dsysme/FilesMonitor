@@ -66,7 +66,7 @@ public class CheckFilesForModifications {
             }
             File configFolder = new File(configFolderName);
             if (!configFolder.exists()) {
-                logger.error(configFolderName + " does not exists.");
+                logger.error(configFolder.getAbsolutePath() + " does not exists.");
                 throw new Exception(configFolderName + " does not exists.");
             }
             InputFilesLoader.INSTANCE.load(configFolderName);
