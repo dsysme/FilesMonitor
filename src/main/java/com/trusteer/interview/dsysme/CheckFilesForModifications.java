@@ -7,24 +7,29 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CheckFilesForModifications {
+public enum CheckFilesForModifications {
+    INSTANCE;
+
     final static Logger logger = LoggerFactory.getLogger(CheckFilesForModifications.class);
+    public static final String FILES_MONITOR = "FilesMonitor";
     private static FilesMonitor filesMonitor;
+    String outputFolder;
+    String logFile;
 
     public static void main(String[] args) {
-        logger.info("CheckFilesForModifications starting...");
+        CheckFilesForModifications.INSTANCE.logger.info("CheckFilesForModifications starting...");
         String historyFileName ="";
         try {
-            historyFileName = buildFilesMonitorEnv();
+            historyFileName = CheckFilesForModifications.INSTANCE.buildFilesMonitorEnv();
         } catch (Exception e) {
             logger.error("Failed to create FilesMonitor", e);
             System.exit(-1);
         }
-        associateFilesMonitorWithAlertHandlers();
+        CheckFilesForModifications.INSTANCE.associateFilesMonitorWithAlertHandlers();
         // do the actual monitoring
-        filesMonitor.checkModifications();
+        CheckFilesForModifications.INSTANCE.filesMonitor.checkModifications();
         // save monitoring reference for next run
-        persistMonitoringData(historyFileName);
+        CheckFilesForModifications.INSTANCE.persistMonitoringData(historyFileName);
     }
 
     private static void persistMonitoringData(String historyFileName) {
@@ -37,20 +42,24 @@ public class CheckFilesForModifications {
         }
     }
 
-    private static void associateFilesMonitorWithAlertHandlers() {
+    private void associateFilesMonitorWithAlertHandlers() {
         AlertHandler alertHandler = new AlertHandler();
-        AlertNotifier alertNotifier = new AlertByEmail("sharon.shmorak@gamil.com");
+        AlertNotifier alertNotifier = new EmailAlert("sharon.shmorak@gamil.com");
         alertHandler.add(alertNotifier);
-        logger.info("Added email alert handler");
-        alertHandler.add(new LogAlert());
-        logger.info("Added log alert handler");
+        logger.info("Added email alert notifier");
+        alertNotifier = new LogAlert(FILES_MONITOR, logFile);
+        alertHandler.add(alertNotifier);
+        logger.info("Added log file alert notifier "+logFile);
         filesMonitor.addObserver(alertHandler);
     }
 
-    private static String buildFilesMonitorEnv() throws Exception {
+    private String buildFilesMonitorEnv() throws Exception {
 
+        outputFolder = System.getProperty("user.home")+File.separator+FilesMonitor.class.getSimpleName();
+        logFile = outputFolder +File.separator+"logs"+File.separator+"FileModifications.log";
+        //
         // make sure working directory exists (this is where input/output files are kept)
-        File workingDirectory = new File(System.getProperty("directory", System.getProperty("user.home")+File.separator+FilesMonitor.class.getSimpleName()));
+        File workingDirectory = new File(System.getProperty("directory", outputFolder));
         if (!workingDirectory.exists()) {
             workingDirectory.mkdirs();
             logger.info("created "+workingDirectory);

@@ -3,10 +3,10 @@ package com.trusteer.interview.dsysme;
 /**
  * Created by Sharon on 28/12/2016.
  */
-public class AlertByEmail implements AlertNotifier {
+public class EmailAlert implements AlertNotifier {
     private String email;
 
-    public AlertByEmail(String email) {
+    public EmailAlert(String email) {
         this.email = email;
     }
 
