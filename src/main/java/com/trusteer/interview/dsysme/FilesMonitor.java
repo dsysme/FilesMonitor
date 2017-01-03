@@ -24,6 +24,7 @@ public class FilesMonitor extends Observable  {
     }
 
     public void checkModifications() {
+        logger.info("checking modifications");
         monitoredFiles.keySet().stream().forEach(monitoredFile -> {
                     logger.info("checking "+monitoredFile.toString());
                     HttpFileTrackingInfo oldTrackingInfo = monitoredFiles.get(monitoredFile);

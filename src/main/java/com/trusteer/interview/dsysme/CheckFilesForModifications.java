@@ -48,6 +48,7 @@ public class CheckFilesForModifications {
     }
 
     private static String buildFilesMonitorEnv() throws Exception {
+
         // make sure working directory exists (this is where input/output files are kept)
         File workingDirectory = new File(System.getProperty("directory", System.getProperty("user.home")+File.separator+FilesMonitor.class.getSimpleName()));
         if (!workingDirectory.exists()) {
@@ -58,8 +59,18 @@ public class CheckFilesForModifications {
         // reference monitoring data from configuration files
         File historyFile = new File(workingDirectory, System.getProperty("history", "MonitoredFiles.ser"));
         if (!historyFile.exists()) {
-            ConfigurationLoader.INSTANCE.load();
-            filesMonitor = FilesMonitorFactory.INSTANCE.createNewFilesMonitor(ConfigurationLoader.INSTANCE.getHttpFileDescriptors());
+            String configFolderName = System.getProperty("file-monitor-config.dir");
+            if (configFolderName == null || configFolderName.isEmpty()) {
+                logger.error("Missing parameter 'file-monitor-config.dir'");
+                throw new Exception("Missing parameter 'file-monitor-config.dir'");
+            }
+            File configFolder = new File(configFolderName);
+            if (!configFolder.exists()) {
+                logger.error(configFolderName + " does not exists.");
+                throw new Exception(configFolderName + " does not exists.");
+            }
+            InputFilesLoader.INSTANCE.load(configFolderName);
+            filesMonitor = FilesMonitorFactory.INSTANCE.createNewFilesMonitor(InputFilesLoader.INSTANCE.getHttpFileDescriptors());
         } else {
             Map<HttpFileDescriptor, HttpFileTrackingInfo> monitoredFiles = new HashMap<>();
             monitoredFiles.putAll(new HashMap<>(TrackingInfoReader.INSTANCE.read(historyFile)));

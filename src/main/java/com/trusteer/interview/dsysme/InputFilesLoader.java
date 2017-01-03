@@ -14,28 +14,29 @@ import java.util.stream.Stream;
  * This class responsibility is to read all configuration files and create a list of all URL,IP pairs that needs
  * to be monitored.
  */
-public enum ConfigurationLoader {
+public enum InputFilesLoader {
 
     INSTANCE;
 
-    final static Logger logger = LoggerFactory.getLogger(ConfigurationLoader.class);
+    final static Logger logger = LoggerFactory.getLogger(InputFilesLoader.class);
 
     private List<HttpFileDescriptor> httpFileDescriptors;
 
-    ConfigurationLoader() {
+    InputFilesLoader() {
         httpFileDescriptors = new ArrayList<>();
     }
 
-    public void load() {
+    public void load(String folderName) {
 
         try {
-            ConfigurationFilesCollector.INSTANCE.collectConfigurationFiles().stream().forEach(file -> loadDescriptors(file));
+            InputFilesCollector.INSTANCE.collectConfigurationFiles(folderName).stream().forEach(file -> loadDescriptors(file));
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error("Failed to load configuration files: " + e.getMessage());
         }
     }
 
     private void loadDescriptors(String fileName) {
+        logger.info("Loading urls from "+fileName);
         try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
             stream.forEach(line -> {
                 HttpFileDescriptor fd;
