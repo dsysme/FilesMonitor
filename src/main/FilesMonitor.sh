@@ -9,9 +9,9 @@ pID=$(pgrep -n "dsysme-files-monitor-0.1.0.jar")
 if $pID > /dev/null
 then
     #log something to syslog
-    logger  $pID "already running. not restarting."
+    echo "already running. not restarting: $(date)" >> /tmp/FilesMonitorScheduler.log
 else
     # start jar file
-    logger $0 "Running FilesMonitor"
+     echo "Starting FilesMonitor: $(date)" >> /tmp/FilesMonitorScheduler.log
     /usr/bin/java -jar -Dfile-monitor-config.dir=$FILES_MONITOR_HOME/config -Dlogback.configurationFile=$FILES_MONITOR_HOME/logback.xml $FILES_MONITOR_HOME/dsysme-files-monitor-0.1.0.jar
 fi
