@@ -6,6 +6,7 @@ import com.trusteer.interview.dsysme.alerts.EmailAlert;
 import com.trusteer.interview.dsysme.alerts.LogAlert;
 import com.trusteer.interview.dsysme.data.HttpFileDescriptor;
 import com.trusteer.interview.dsysme.data.TrackingInfo;
+import com.trusteer.interview.dsysme.utils.EmailSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +63,8 @@ public enum CheckFilesForModifications {
 
     private void associateFilesMonitorWithAlertHandlers() throws Exception {
         AlertHandler alertHandler = new AlertHandler();
-        AlertNotifier alertNotifier = new EmailAlert(SEND_TO);
+        EmailSender emailSender = new EmailSender("dsysme.interview@gmail.com", "dontpanic");
+        AlertNotifier alertNotifier = new EmailAlert(emailSender, SEND_TO);
         alertHandler.add(alertNotifier);
         logger.info("Added email alert notifier");
         alertNotifier = new LogAlert(FILES_MONITOR, logFile);

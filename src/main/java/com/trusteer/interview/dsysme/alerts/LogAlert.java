@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by Sharon on 01/01/2017.
  * Responsible for logging FileModifiedEvents to a distinct log file $FILES_MONITOR_HOME/logs/FileModifications.log
  */
 public class LogAlert implements AlertNotifier {

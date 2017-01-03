@@ -5,14 +5,14 @@ import com.trusteer.interview.dsysme.utils.EmailSender;
 import javax.mail.internet.InternetAddress;
 
 /***
- * Send alert upon file modification to email receipt
+ * Send alert upon file modification to email receipts
  */
 public class EmailAlert implements AlertNotifier {
     private EmailSender emailSender;
     private InternetAddress[] sendTo;
 
-    public EmailAlert(String sendTo) throws Exception {
-        this.emailSender = new EmailSender("dsysme.interview@gmail.com", "dontpanic");
+    public EmailAlert(EmailSender emailSender, String sendTo) throws Exception {
+        this.emailSender = emailSender;
         this.sendTo = InternetAddress.parse(sendTo);
     }
 

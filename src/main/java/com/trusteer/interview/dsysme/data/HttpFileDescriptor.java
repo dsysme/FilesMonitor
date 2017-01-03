@@ -12,9 +12,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-/**
- * Created by Sharon on 27/12/2016.
- * Data object holding a pair of url and host address (ip) that points to a file
+/***
+ * Data object holding a pair of url and host address (ip) that points to a file accessible via http/https protocol
  */
 public class HttpFileDescriptor implements Serializable {
 
@@ -82,7 +81,11 @@ public class HttpFileDescriptor implements Serializable {
 
     static public HttpFileDescriptor fromString(String descriptor) {
         String [] arr = descriptor.split(" +");
-        return new HttpFileDescriptor(arr[0].trim(), arr[1].trim());
+        if (arr.length >= 2)
+            return new HttpFileDescriptor(arr[0].trim(), arr[1].trim());
+        if (arr.length == 1)
+            return new HttpFileDescriptor(arr[0].trim(), "");
+        return new HttpFileDescriptor("", "");
     }
 
     public boolean isValid() {

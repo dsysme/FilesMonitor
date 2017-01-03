@@ -60,8 +60,20 @@ This check should occur every 10 minutes.
 - The program should write a log of its operations to a log file.
 
 **Installing**
-edit <File> section in logback.xml
-chmod 777 /home/dsysme/FilesMonitor.sh
-crontab -e 
-*/1 * * * * /home/dsysme/FilesMonitor.sh /home/dsysme/FilesMonitor
+
+- edit <File> section in logback.xml
+- chmod 777 /home/dsysme/FilesMonitor.sh
+- crontab -e 
+  */10 * * * * /home/dsysme/FilesMonitor.sh /home/dsysme/FilesMonitor
 /home/dsysme/FilesMonitor.sh /home/dsysme/FilesMonitor
+- tail -f /tmp/FilesMonitorScheduler.log
+
+**TODO**
+- add more unit tests (especially test cases for exceptions)
+- performance consideration
+- support distribution task in build.gradle
+- extract to configuration files some hardcoded parameters such as the gmail account used for sending the email alerts
+- add more url ip pairs to configuration file
+- install a small web server on my computer to get the full control of the files.
+- support dependency injection
+- add mock framework such as mockito

@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by Sharon on 28/12/2016.
+ * Data class holding details to serve as a reference for modification. If the tracked object changed, its
+ * hash should change as well. By comparing 2 TrackingInfo.hash generated for same object you can tell if the object
+ * changed and if so you can look at the TrackingInfo.timeStamp to get the time frame during which the object was
+ * modified.
  */
 public class TrackingInfo implements Serializable {
 

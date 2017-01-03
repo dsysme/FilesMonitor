@@ -59,7 +59,6 @@ public class FilesMonitor extends Observable  {
         return null;
     }
 
-
     public Map<HttpFileDescriptor, TrackingInfo> getMonitoredFiles() {
         return Collections.unmodifiableMap(monitoredFiles);
     }

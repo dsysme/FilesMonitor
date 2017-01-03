@@ -6,6 +6,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 /***
+ * Responsible for sending email from 'username' account (must be gmail account)
  * https://www.mkyong.com/java/javamail-api-sending-email-via-gmail-smtp-example/
  *
  */
