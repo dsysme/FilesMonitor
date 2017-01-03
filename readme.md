@@ -58,3 +58,7 @@ This check should occur every 10 minutes.
 - The program may be a combination of programs/scripts.
 - Use any programming language(s). You may use any standard libraries or unix tools as part of the solution.
 - The program should write a log of its operations to a log file.
+
+**Installing**
+crontab -e 
+*/1 * * * * /home/dsysme/FilesMonitor.sh /home/dsysme/FilesMonitor
