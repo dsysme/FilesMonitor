@@ -9,9 +9,21 @@ targetCompatibility = 1.8
 
 dependencies {
     testCompile "junit:junit:4.12"
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
+    compile group: 'javax.mail', name: 'mail', version: '1.4.1'
 }
+
 
 jar {
     baseName = 'dsysme-files-monitor'
     version =  '0.1.0'
+
+    manifest {
+        attributes 'Main-Class': 'com.trusteer.interview.dsysme.CheckFilesForModifications'
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
